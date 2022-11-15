@@ -26,7 +26,7 @@ class _HomeState extends State<Home> {
       _taskList.add(task);
     });
     _saveFile();
-    _controllerTask.text = "";
+    _controllerTask.clear();
   }
 
   void _saveFile() async {
@@ -140,7 +140,10 @@ class _HomeState extends State<Home> {
                   actions: [
                     MaterialButton(
                       child: Text("Cancelar"),
-                      onPressed:() => Navigator.pop(context),
+                      onPressed:(){
+                        Navigator.pop(context);
+                        _controllerTask.clear();
+                      }
                     ),
                     MaterialButton(
                         child: Text("Salvar"),
