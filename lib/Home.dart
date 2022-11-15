@@ -61,6 +61,41 @@ class _HomeState extends State<Home> {
     });
   }
 
+  Widget _createItemList(context, index){
+    final item = _taskList[index]["title"];
+    return Dismissible(
+        key: Key(item),
+        direction: DismissDirection.endToStart,
+        onDismissed: (direction){
+          _taskList.removeAt(index);
+          _saveFile();
+        },
+        background: Container(
+          color: Colors.red,
+          padding: EdgeInsets.all(16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Icon(
+                  Icons.delete,
+                color: Colors.white,
+              )
+            ],
+          ),
+        ),
+        child: CheckboxListTile(
+            title: Text(_taskList[index]["title"]),
+            value: _taskList[index]["done"],
+            onChanged: (changedValue){
+              setState(() {
+                _taskList[index]["done"] = changedValue;
+              });
+              _saveFile();
+            }
+        )
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -111,18 +146,7 @@ class _HomeState extends State<Home> {
           Expanded(
               child: ListView.builder(
                 itemCount: _taskList.length,
-                  itemBuilder: (context, index){
-                  return CheckboxListTile(
-                    title: Text(_taskList[index]["title"]),
-                      value: _taskList[index]["done"],
-                      onChanged: (changedValue){
-                        setState(() {
-                          _taskList[index]["done"] = changedValue;
-                        });
-                        _saveFile();
-                      }
-                  );
-                  }
+                  itemBuilder: _createItemList
               )
           ),
         ],
