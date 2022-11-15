@@ -14,15 +14,23 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
 
   List _taskList = [];
+  TextEditingController _controllerTask = TextEditingController();
+
+  void _addTask(){
+    String _typedText = _controllerTask.text;
+    Map<String, dynamic> task = Map();
+    task["title"] = _typedText;
+    task["done"] = false;
+    setState(() {
+      _taskList.add(task);
+    });
+    _saveFile();
+    _controllerTask.text = "";
+  }
 
   void _saveFile() async {
     final dir = await getApplicationDocumentsDirectory();
     var file = File("${dir.path}/data.json");
-
-    Map<String, dynamic> task = Map();
-    task["títle"] = "Ir ao mercado";
-    task["done"] = false;
-    _taskList.add(task);
 
     String data = json.encode(_taskList);
     file.writeAsString(data);
@@ -71,6 +79,7 @@ class _HomeState extends State<Home> {
                 return AlertDialog(
                   title: Text("Adicionar Tarefa"),
                   content: TextField(
+                    controller: _controllerTask,
                     decoration: InputDecoration(
                       labelText: "Digite a sua tarefa"
                     ),
@@ -86,6 +95,7 @@ class _HomeState extends State<Home> {
                     MaterialButton(
                         child: Text("Salvar"),
                       onPressed:(){
+                          _addTask();
                         Navigator.pop(context);
                       }
                     ),
