@@ -28,6 +28,11 @@ class _HomeState extends State<Home> {
     file.writeAsString(data);
   }
 
+  Future<File> _getFile() async {
+    final dir = await getApplicationDocumentsDirectory();
+    return File("${dir.path}/data.json");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
