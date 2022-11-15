@@ -43,6 +43,17 @@ class _HomeState extends State<Home> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _readFile().then((readReturn){
+      setState(() {
+        _taskList = json.decode(readReturn);
+      });
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -92,7 +103,7 @@ class _HomeState extends State<Home> {
                 itemCount: _taskList.length,
                   itemBuilder: (context, index){
                     return ListTile(
-                      title: Text(_taskList[index]),
+                      title: Text(_taskList[index]["title"]),
                     );
                   }
               )
