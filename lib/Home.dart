@@ -1,4 +1,8 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:async/async.dart';
+import 'dart:convert';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -9,7 +13,20 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
 
-  List _taskList = ["Exemplo 1", "Exemplo 2", "Exemplo 3"];
+  List _taskList = [];
+
+  void _saveFile() async {
+    final dir = await getApplicationDocumentsDirectory();
+    var file = File("${dir.path}/data.json");
+
+    Map<String, dynamic> task = Map();
+    task["títle"] = "Ir ao mercado";
+    task["done"] = false;
+    _taskList.add(task);
+
+    String data = json.encode(_taskList);
+    file.writeAsString(data);
+  }
 
   @override
   Widget build(BuildContext context) {
