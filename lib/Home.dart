@@ -33,6 +33,15 @@ class _HomeState extends State<Home> {
     return File("${dir.path}/data.json");
   }
 
+  Future<String> _readFile() async{
+    try{
+      final file = await _getFile();
+      return file.readAsString();
+    }catch(e){
+      return "";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
