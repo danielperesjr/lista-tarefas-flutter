@@ -112,9 +112,16 @@ class _HomeState extends State<Home> {
               child: ListView.builder(
                 itemCount: _taskList.length,
                   itemBuilder: (context, index){
-                    return ListTile(
-                      title: Text(_taskList[index]["title"]),
-                    );
+                  return CheckboxListTile(
+                    title: Text(_taskList[index]["title"]),
+                      value: _taskList[index]["done"],
+                      onChanged: (changedValue){
+                        setState(() {
+                          _taskList[index]["done"] = changedValue;
+                        });
+                        _saveFile();
+                      }
+                  );
                   }
               )
           ),
