@@ -14,6 +14,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
 
   List _taskList = [];
+  Map<String, dynamic> _lastDeletedTask = Map();
   TextEditingController _controllerTask = TextEditingController();
 
   void _addTask(){
@@ -62,13 +63,29 @@ class _HomeState extends State<Home> {
   }
 
   Widget _createItemList(context, index){
-    final item = _taskList[index]["title"];
+
     return Dismissible(
-        key: Key(item),
+        key: Key(DateTime.now().millisecondsSinceEpoch.toString()),
         direction: DismissDirection.endToStart,
         onDismissed: (direction){
+          _lastDeletedTask = _taskList[index];
           _taskList.removeAt(index);
           _saveFile();
+          final snackBar = SnackBar(
+            backgroundColor: Colors.green,
+              duration: Duration(seconds: 3),
+              action: SnackBarAction(
+                  label: "Desfazer",
+                  onPressed: (){
+                    setState(() {
+                      _taskList.insert(index, _lastDeletedTask);
+                    });
+                    _saveFile();
+                  }
+              ),
+              content: Text("Tarefa Removida"),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
         },
         background: Container(
           color: Colors.red,
@@ -118,9 +135,7 @@ class _HomeState extends State<Home> {
                     decoration: InputDecoration(
                       labelText: "Digite a sua tarefa"
                     ),
-                    onChanged: (text){
-
-                    },
+                    onChanged: (text){},
                   ),
                   actions: [
                     MaterialButton(
